@@ -5,6 +5,7 @@ import {
   TechStack,
   Projects,
   Contact,
+  Chatbot,
 } from './components'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Projects />
         <Contact />
       </main>
+      <Chatbot />
     </div>
   )
 }
