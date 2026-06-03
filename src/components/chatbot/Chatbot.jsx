@@ -3,7 +3,8 @@ import { MessageSquare, X, Send, Bot, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const HF_API_KEY = import.meta.env.VITE_HF_API_KEY || null;
-const HF_MODEL = 'mistralai/Mistral-7B-Instruct-v0.2';
+// Using free model that works with HF Inference API
+const HF_MODEL = 'facebook/blenderbot-400M-distill';
 
 // Fallback rule-based responses when API is unavailable
 const getFallbackResponse = (input) => {
@@ -66,15 +67,10 @@ const Chatbot = () => {
           method: 'POST',
           headers,
           body: JSON.stringify({
-            inputs: `<s>[INST] You are a helpful AI assistant for a portfolio website. Be concise (2-3 sentences). 
-
-User: ${userMessage}
-Assistant:[/INST]`,
-            parameters: {
-              max_new_tokens: 150,
-              temperature: 0.7,
-              top_p: 0.9,
-              return_full_text: false
+            inputs: {
+              text: userMessage,
+              past_user_inputs: [],
+              generated_responses: []
             }
           })
         }
@@ -89,30 +85,30 @@ Assistant:[/INST]`,
       }
 
       const data = await response.json();
+      console.log('HF Response:', data);
       
-      // Extract the generated text
+      // Extract the generated text (BlenderBot format)
       let aiResponse = '';
-      if (Array.isArray(data) && data[0]?.generated_text) {
-        aiResponse = data[0].generated_text.trim();
-      } else if (data.generated_text) {
+      if (data.generated_text) {
         aiResponse = data.generated_text.trim();
+      } else if (Array.isArray(data) && data[0]?.generated_text) {
+        aiResponse = data[0].generated_text.trim();
+      } else if (typeof data === 'string') {
+        aiResponse = data.trim();
       } else {
-        aiResponse = "I'm not sure how to answer that. Could you try rephrasing your question?";
+        aiResponse = JSON.stringify(data).substring(0, 100);
       }
-
-      // Clean up any remaining instruction tokens
-      aiResponse = aiResponse.replace(/\[\/?INST\]/g, '').replace(/<s>|<\/s>/g, '').trim();
 
       setMessages(prev => [...prev, { role: 'model', text: aiResponse }]);
     } catch (error) {
       console.error('HF Inference error:', error);
       
-      // Use fallback response when API fails
-      const fallbackResponse = getFallbackResponse(userMessage);
+      // DEBUG: Show actual error
+      const errorMsg = error.message || error.toString();
       
       setMessages(prev => [...prev, { 
         role: 'model', 
-        text: fallbackResponse + '\n\n_(Offline mode - HF API unavailable)_' 
+        text: `DEBUG ERROR: ${errorMsg.substring(0, 200)}` 
       }]);
     } finally {
       setIsLoading(false);
