@@ -9,3 +9,6 @@ export { default as Contact } from './sections/Contact';
 
 // Effects Components
 export { default as ParticleBackground } from './effects/ParticleBackground';
+
+// Chatbot Component
+export { default as Chatbot } from './chatbot/Chatbot';
