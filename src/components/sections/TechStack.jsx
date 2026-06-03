@@ -51,21 +51,21 @@ const TechStack = () => {
   };
 
   return (
-    <section id="tech" className="py-24 px-6 relative" ref={ref}>
+    <section id="tech" className="py-16 sm:py-24 px-4 sm:px-6 relative" ref={ref}>
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
         >
-          <span className="text-primary-400 text-sm font-medium uppercase tracking-wider">
+          <span className="text-primary-400 text-xs sm:text-sm font-medium uppercase tracking-wider">
             My Arsenal
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-2 mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-2 mb-3 sm:mb-4">
             Tech <span className="gradient-text">Stack</span>
           </h2>
-          <p className="text-gray-500 max-w-2xl mx-auto">
+          <p className="text-gray-500 text-sm sm:text-base max-w-2xl mx-auto px-2">
             Technologies I've mastered to bring ideas to life
           </p>
         </motion.div>
@@ -74,7 +74,7 @@ const TechStack = () => {
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
-          className="grid md:grid-cols-3 gap-8"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8"
         >
           {technologies.map((category) => (
             <motion.div

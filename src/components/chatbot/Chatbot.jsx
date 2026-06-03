@@ -2,34 +2,94 @@ import { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, Bot, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const HF_API_KEY = import.meta.env.VITE_HF_API_KEY || null;
-// Using free model that works with HF Inference API
-const HF_MODEL = 'facebook/blenderbot-400M-distill';
+// Suggested questions for users
+const SUGGESTIONS = [
+  "What are your skills?",
+  "Tell me about your projects",
+  "How can I contact you?",
+  "What's your experience?",
+  "Tell me a joke"
+];
 
-// Fallback rule-based responses when API is unavailable
-const getFallbackResponse = (input) => {
+// Rule-based responses - speaking as the developer (first person)
+const getAIResponse = (input) => {
   const lowerInput = input.toLowerCase();
   
-  if (/hi|hello|hey/.test(lowerInput)) {
-    return "Hello! Welcome to this portfolio. I'm currently running in offline mode due to network issues, but I can still help answer basic questions!";
-  }
-  if (/skill|tech|stack|react|javascript/.test(lowerInput)) {
-    return "The developer specializes in React, JavaScript, TypeScript, Node.js, Tailwind CSS, and modern web technologies.";
-  }
-  if (/project|work|portfolio/.test(lowerInput)) {
-    return "This portfolio showcases web applications, interactive UIs, and full-stack projects. Check the Projects section!";
-  }
-  if (/contact|hire|email/.test(lowerInput)) {
-    return "You can reach out through the Contact section. The developer is open to new opportunities!";
+  // Greetings
+  if (/hi|hello|hey|greetings/.test(lowerInput)) {
+    return "Hey there! Welcome to my portfolio! 👋 I'm a web developer passionate about building modern, interactive web applications. Feel free to ask me about my skills, projects, or anything else you'd like to know!";
   }
   
-  return "I'm running in offline mode right now. Please check your network connection to use the full AI assistant, or ask about skills, projects, or contact info.";
+  // Name/Who - first person
+  if (/who are you|your name|who made this|about you/.test(lowerInput)) {
+    return "I'm a passionate web developer who loves creating modern, interactive web applications with React and cutting-edge technologies. This portfolio showcases my work and journey in web development!";
+  }
+  
+  // Skills/Tech Stack - first person
+  if (/skill|tech|stack|technologies|languages|framework|react|javascript|tools|what do you know/.test(lowerInput)) {
+    return "I specialize in React, JavaScript, TypeScript, Node.js, and modern web technologies. I'm also experienced with Tailwind CSS, Git, Vite, and various frontend frameworks. Check out the Tech Stack section to see my full skill set!";
+  }
+  
+  // Projects - first person
+  if (/project|portfolio work|what (have you built|did you make)|showcase|demo|github/.test(lowerInput)) {
+    return "I've built several exciting projects including web applications, interactive UIs, and full-stack solutions. Each project demonstrates different skills and technologies I've learned. Check out the Projects section to see live demos and my GitHub repositories!";
+  }
+  
+  // Contact - first person
+  if (/contact|hire|work with you|email|reach|get in touch|collaboration/.test(lowerInput)) {
+    return "I'd love to hear from you! You can reach out through the Contact section. I'm always open to discussing new opportunities, freelance work, collaborations, or just chatting about web development!";
+  }
+  
+  // Experience - first person
+  if (/experience|background|work history|career|job|professional/.test(lowerInput)) {
+    return "I have experience building modern web applications, from frontend interfaces to full-stack solutions. I'm passionate about clean code, user experience, accessibility, and I'm always learning new technologies to stay current!";
+  }
+  
+  // Resume/CV - first person
+  if (/resume|cv|download/.test(lowerInput)) {
+    return "You can download my resume from the Contact section. It has all the details about my skills, experience, education, and professional background. Feel free to check it out!";
+  }
+  
+  // Help
+  if (/help|what can you do|assist|support/.test(lowerInput)) {
+    return "I can tell you about my skills, projects, experience, or how to contact me. Just ask away - I'm here to help you learn more about my work!";
+  }
+  
+  // Time
+  if (/time|date|what time is it/.test(lowerInput)) {
+    return `It's currently ${new Date().toLocaleTimeString()}. Thanks for stopping by my portfolio!`;
+  }
+  
+  // Jokes
+  if (/joke|funny|humor|make me laugh/.test(lowerInput)) {
+    const jokes = [
+      "Why do programmers prefer dark mode? Because light attracts bugs! 🐛",
+      "I would tell you a UDP joke, but you might not get it. 📡",
+      "Why do JavaScript developers wear glasses? Because they don't C#! 👓",
+      "What's a computer's favorite snack? Microchips! 🍟",
+      "Why was the function sad? It didn't get any callbacks! 📞"
+    ];
+    return jokes[Math.floor(Math.random() * jokes.length)];
+  }
+  
+  // Thanks
+  if (/thank|thanks|appreciate/.test(lowerInput)) {
+    return "You're welcome! Feel free to ask if you have any other questions. I'm happy to chat! 😊";
+  }
+  
+  // Goodbye
+  if (/bye|goodbye|see you|later/.test(lowerInput)) {
+    return "Goodbye! Thanks for visiting my portfolio. Have a great day! 👋 Feel free to come back anytime!";
+  }
+  
+  // Fallback - first person
+  return "That's an interesting question! I can tell you about my projects, skills, or experience. What would you like to explore?";
 };
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { role: 'model', text: 'Hi! I\'m your AI assistant powered by Hugging Face. Ask me about this portfolio or anything else!' }
+    { role: 'model', text: 'Hey there! 👋 Welcome to my portfolio! I\'m the developer behind this site. Ask me about my skills, projects, or just say hi!' }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -43,7 +103,7 @@ const Chatbot = () => {
     scrollToBottom();
   }, [messages]);
 
-  const sendMessage = async () => {
+  const sendMessage = () => {
     if (!input.trim() || isLoading) return;
 
     const userMessage = input.trim();
@@ -51,68 +111,12 @@ const Chatbot = () => {
     setMessages(prev => [...prev, { role: 'user', text: userMessage }]);
     setIsLoading(true);
 
-    try {
-      const headers = {
-        'Content-Type': 'application/json',
-      };
-      
-      // Add auth header if API key is provided (increases rate limits)
-      if (HF_API_KEY) {
-        headers['Authorization'] = `Bearer ${HF_API_KEY}`;
-      }
-
-      const response = await fetch(
-        `https://api-inference.huggingface.co/models/${HF_MODEL}`,
-        {
-          method: 'POST',
-          headers,
-          body: JSON.stringify({
-            inputs: {
-              text: userMessage,
-              past_user_inputs: [],
-              generated_responses: []
-            }
-          })
-        }
-      );
-
-      if (!response.ok) {
-        // Handle rate limiting - suggest getting a free API key
-        if (response.status === 429) {
-          throw new Error('Rate limit reached. Consider adding a free Hugging Face API key for higher limits, or try again in a moment.');
-        }
-        throw new Error('Failed to get response from Hugging Face');
-      }
-
-      const data = await response.json();
-      console.log('HF Response:', data);
-      
-      // Extract the generated text (BlenderBot format)
-      let aiResponse = '';
-      if (data.generated_text) {
-        aiResponse = data.generated_text.trim();
-      } else if (Array.isArray(data) && data[0]?.generated_text) {
-        aiResponse = data[0].generated_text.trim();
-      } else if (typeof data === 'string') {
-        aiResponse = data.trim();
-      } else {
-        aiResponse = JSON.stringify(data).substring(0, 100);
-      }
-
+    // Simulate typing delay for natural feel, then respond
+    setTimeout(() => {
+      const aiResponse = getAIResponse(userMessage);
       setMessages(prev => [...prev, { role: 'model', text: aiResponse }]);
-    } catch (error) {
-      console.error('HF Inference error:', error);
-      
-      // DEBUG: Show actual error
-      const errorMsg = error.message || error.toString();
-      
-      setMessages(prev => [...prev, { 
-        role: 'model', 
-        text: `DEBUG ERROR: ${errorMsg.substring(0, 200)}` 
-      }]);
-    } finally {
       setIsLoading(false);
-    }
+    }, 600 + Math.random() * 400);
   };
 
   const handleKeyPress = (e) => {
@@ -127,13 +131,13 @@ const Chatbot = () => {
       {/* Floating Button */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition-colors"
+        className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 z-50 w-12 h-12 sm:w-14 sm:h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition-colors"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
       >
-        {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
+        {isOpen ? <X size={20} className="sm:w-6 sm:h-6" /> : <MessageSquare size={20} className="sm:w-6 sm:h-6" />}
       </motion.button>
 
       {/* Chat Window */}
@@ -144,21 +148,16 @@ const Chatbot = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-24 right-6 z-50 w-80 sm:w-96 h-[500px] bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+            className="fixed bottom-24 right-2 sm:right-6 z-50 w-[calc(100vw-1rem)] sm:w-80 md:w-96 max-w-[400px] h-[70vh] sm:h-[500px] max-h-[600px] bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-3 flex items-center gap-2">
               <Bot size={20} className="text-white" />
-              <span className="text-white font-semibold">AI Assistant</span>
+              <span className="text-white font-semibold">Chat with Me</span>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
-              {!HF_API_KEY && messages.length === 1 && (
-                <div className="bg-blue-900/40 border border-blue-700/50 rounded-lg p-2 text-blue-200 text-xs">
-                  💡 Running on Hugging Face free tier. Add an API key for higher rate limits.
-                </div>
-              )}
+            <div className="flex-1 overflow-y-auto p-2 sm:p-4 space-y-3 sm:space-y-4">
               {messages.map((msg, index) => (
                 <motion.div
                   key={index}
@@ -171,7 +170,7 @@ const Chatbot = () => {
                   }`}>
                     {msg.role === 'user' ? <User size={16} /> : <Bot size={16} />}
                   </div>
-                  <div className={`max-w-[75%] rounded-2xl px-4 py-2 text-sm ${
+                  <div className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-3 py-2 text-xs sm:text-sm ${
                     msg.role === 'user'
                       ? 'bg-blue-600 text-white rounded-br-none'
                       : 'bg-gray-800 text-gray-100 rounded-bl-none'
@@ -180,6 +179,27 @@ const Chatbot = () => {
                   </div>
                 </motion.div>
               ))}
+              {/* Suggestion Chips - appear after each bot message when not loading */}
+              {!isLoading && messages.length > 0 && messages[messages.length - 1].role === 'model' && (
+                <motion.div
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex flex-wrap gap-2 mt-2"
+                >
+                  {SUGGESTIONS.map((suggestion, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setInput(suggestion);
+                        setTimeout(() => sendMessage(), 100);
+                      }}
+                      className="bg-gray-800 hover:bg-gray-700 text-gray-300 text-[10px] sm:text-xs px-2 sm:px-3 py-1 sm:py-1.5 rounded-full transition-colors border border-gray-700 hover:border-gray-600"
+                    >
+                      {suggestion}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
               {isLoading && (
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -222,15 +242,15 @@ const Chatbot = () => {
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyPress}
                   placeholder="Type a message..."
-                  className="flex-1 bg-gray-800 text-white rounded-full px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                  className="flex-1 bg-gray-800 text-white rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
                   disabled={isLoading}
                 />
                 <button
                   onClick={sendMessage}
                   disabled={isLoading || !input.trim()}
-                  className="w-10 h-10 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white rounded-full flex items-center justify-center transition-colors"
+                  className="w-9 h-9 sm:w-10 sm:h-10 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-700 disabled:cursor-not-allowed text-white rounded-full flex items-center justify-center transition-colors flex-shrink-0"
                 >
-                  <Send size={18} />
+                  <Send size={16} className="sm:w-[18px] sm:h-[18px]" />
                 </button>
               </div>
             </div>

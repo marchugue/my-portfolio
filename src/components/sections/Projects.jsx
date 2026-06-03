@@ -86,45 +86,45 @@ const Projects = () => {
   };
 
   return (
-    <section id="projects" className="py-24 px-6 relative overflow-hidden" ref={ref}>
+    <section id="projects" className="py-16 sm:py-24 px-4 sm:px-6 relative overflow-hidden" ref={ref}>
       <div className="max-w-6xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 sm:mb-16"
         >
-          <span className="text-primary-400 text-sm font-medium uppercase tracking-wider">
+          <span className="text-primary-400 text-xs sm:text-sm font-medium uppercase tracking-wider">
             Featured Work
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold mt-2 mb-4">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mt-2 mb-3 sm:mb-4">
             My <span className="gradient-text">Projects</span>
           </h2>
-          <p className="text-gray-500 max-w-2xl mx-auto">
+          <p className="text-gray-500 text-sm sm:text-base max-w-2xl mx-auto px-2">
             Showcasing innovative solutions where software meets hardware
           </p>
         </motion.div>
 
-        <div className="relative flex items-center justify-center min-h-[600px]">
+        <div className="relative flex items-center justify-center min-h-[500px] sm:min-h-[600px]">
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={prevProject}
-            className="absolute left-0 z-40 p-3 rounded-full glass text-white hover:bg-primary-500/20 transition-all"
+            className="absolute left-0 sm:left-2 z-40 p-2 sm:p-3 rounded-full glass text-white hover:bg-primary-500/20 transition-all"
           >
-            <ChevronLeft className="w-6 h-6" />
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
           </motion.button>
 
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={nextProject}
-            className="absolute right-0 z-40 p-3 rounded-full glass text-white hover:bg-primary-500/20 transition-all"
+            className="absolute right-0 sm:right-2 z-40 p-2 sm:p-3 rounded-full glass text-white hover:bg-primary-500/20 transition-all"
           >
-            <ChevronRight className="w-6 h-6" />
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
           </motion.button>
 
-          <div className="relative w-full max-w-xl flex items-center justify-center">
+          <div className="relative w-full max-w-xs sm:max-w-md md:max-w-xl flex items-center justify-center px-8 sm:px-0">
             {projects.map((project, index) => {
               const style = getCardStyle(index);
               const isActive = index === activeIndex;
@@ -143,7 +143,7 @@ const Projects = () => {
                   className="absolute w-full"
                 >
                   <div className={`glass rounded-2xl overflow-hidden ${isActive ? 'glow-blue' : ''}`}>
-                    <div className="h-56 bg-gradient-to-br from-dark-800 to-dark-700 relative overflow-hidden">
+                    <div className="h-44 sm:h-56 bg-gradient-to-br from-dark-800 to-dark-700 relative overflow-hidden">
                       <img 
                         src={project.image} 
                         alt={project.title}
@@ -155,35 +155,35 @@ const Projects = () => {
                       <motion.div
                         animate={isActive ? { scale: [1, 1.1, 1] } : { scale: 1 }}
                         transition={{ duration: 2, repeat: Infinity }}
-                        className="absolute bottom-4 left-4 w-16 h-16 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center"
+                        className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 w-12 h-12 sm:w-16 sm:h-16 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center"
                       >
-                        <project.icon className="w-8 h-8 text-white" />
+                        <project.icon className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                       </motion.div>
                       
                       {isActive && (
-                        <div className="absolute top-4 right-4">
-                          <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-sm font-medium">
+                        <div className="absolute top-3 sm:top-4 right-3 sm:right-4">
+                          <span className="px-2 sm:px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm text-white text-xs sm:text-sm font-medium">
                             Featured
                           </span>
                         </div>
                       )}
                     </div>
 
-                    <div className="p-8">
-                      <h3 className="text-2xl font-bold mb-2">{project.title}</h3>
-                      <p className={`text-${project.accent}-400 text-base mb-4`}>
+                    <div className="p-4 sm:p-8">
+                      <h3 className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2">{project.title}</h3>
+                      <p className={`text-${project.accent}-400 text-sm sm:text-base mb-3 sm:mb-4`}>
                         {project.subtitle}
                       </p>
                       
-                      <p className="text-gray-400 text-base mb-6 line-clamp-3 leading-relaxed">
+                      <p className="text-gray-400 text-sm sm:text-base mb-4 sm:mb-6 line-clamp-2 sm:line-clamp-3 leading-relaxed">
                         {project.description}
                       </p>
 
-                      <div className="flex flex-wrap gap-2 mb-6">
+                      <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-6">
                         {project.tech.map((t) => (
                           <span
                             key={t}
-                            className="px-3 py-1.5 rounded-md bg-dark-700 text-gray-300 text-sm"
+                            className="px-2 sm:px-3 py-1 sm:py-1.5 rounded-md bg-dark-700 text-gray-300 text-xs sm:text-sm"
                           >
                             {t}
                           </span>
@@ -195,19 +195,19 @@ const Projects = () => {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.2 }}
-                          className="flex gap-4"
+                          className="flex flex-col sm:flex-row gap-2 sm:gap-4"
                         >
                           <a
                             href="https://github.com/marchugue"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex-1 px-5 py-3 rounded-lg bg-dark-700 text-white font-medium flex items-center justify-center gap-2 hover:bg-dark-600 transition-colors"
+                            className="flex-1 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg bg-dark-700 text-white font-medium text-sm sm:text-base flex items-center justify-center gap-2 hover:bg-dark-600 transition-colors"
                           >
-                            <Github className="w-5 h-5" />
+                            <Github className="w-4 h-4 sm:w-5 sm:h-5" />
                             View Code
                           </a>
-                          <button className="flex-1 px-5 py-3 rounded-lg bg-gradient-to-r from-primary-600 to-primary-500 text-white font-medium flex items-center justify-center gap-2">
-                            <ExternalLink className="w-5 h-5" />
+                          <button className="flex-1 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg bg-gradient-to-r from-primary-600 to-primary-500 text-white font-medium text-sm sm:text-base flex items-center justify-center gap-2">
+                            <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5" />
                             Live Demo
                           </button>
                         </motion.div>
@@ -220,15 +220,15 @@ const Projects = () => {
           </div>
         </div>
 
-        <div className="flex justify-center gap-2 mt-8">
+        <div className="flex justify-center gap-2 mt-6 sm:mt-8">
           {projects.map((_, index) => (
             <button
               key={index}
               onClick={() => setActiveIndex(index)}
-              className={`w-2 h-2 rounded-full transition-all ${
+              className={`h-2 rounded-full transition-all ${
                 index === activeIndex
-                  ? 'w-8 bg-primary-500'
-                  : 'bg-gray-600 hover:bg-gray-500'
+                  ? 'w-6 sm:w-8 bg-primary-500'
+                  : 'w-2 bg-gray-600 hover:bg-gray-500'
               }`}
             />
           ))}
