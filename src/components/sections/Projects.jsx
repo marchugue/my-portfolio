@@ -1,6 +1,6 @@
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, Github, Radio, Cpu, Shield, ExternalLink } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Github, Radio, Cpu, Shield, ExternalLink, BarChart3 } from 'lucide-react';
 
 const Projects = () => {
   const ref = useRef(null);
@@ -43,6 +43,20 @@ const Projects = () => {
       color: 'from-green-500 to-emerald-600',
       accent: 'green',
       image: '/placeholder-auth.svg',
+    },
+    {
+      id: 4,
+      title: 'Sales Analytics Dashboard',
+      subtitle: 'Data Analytics & Visualization Platform',
+      description:
+        'A comprehensive sales analytics dashboard built with MVC architecture. Features real-time data visualization, interactive charts, and comprehensive sales metrics tracking with secure authentication.',
+      tech: ['React JS', 'Node.js', 'MySQL', 'Aiven', 'Render', 'Vercel'],
+      icon: BarChart3,
+      color: 'from-orange-500 to-red-600',
+      accent: 'orange',
+      image: '/placeholder-sales.svg',
+      liveDemo: 'https://sales-production.vercel.app/',
+      githubUrl: 'https://github.com/marchugue/sales_dashboard-source_code',
     },
   ];
 
@@ -198,7 +212,7 @@ const Projects = () => {
                           className="flex flex-col sm:flex-row gap-2 sm:gap-4"
                         >
                           <a
-                            href="https://github.com/marchugue"
+                            href={project.githubUrl || "https://github.com/marchugue"}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex-1 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg bg-dark-700 text-white font-medium text-sm sm:text-base flex items-center justify-center gap-2 hover:bg-dark-600 transition-colors"
@@ -206,10 +220,15 @@ const Projects = () => {
                             <Github className="w-4 h-4 sm:w-5 sm:h-5" />
                             View Code
                           </a>
-                          <button className="flex-1 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg bg-gradient-to-r from-primary-600 to-primary-500 text-white font-medium text-sm sm:text-base flex items-center justify-center gap-2">
+                          <a
+                            href={project.liveDemo || "#"}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg bg-gradient-to-r from-primary-600 to-primary-500 text-white font-medium text-sm sm:text-base flex items-center justify-center gap-2 hover:from-primary-700 hover:to-primary-600 transition-colors"
+                          >
                             <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5" />
                             Live Demo
-                          </button>
+                          </a>
                         </motion.div>
                       )}
                     </div>

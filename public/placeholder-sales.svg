@@ -1,0 +1,29 @@
+<svg width="400" height="300" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#1a1a2e"/>
+  <rect x="20" y="20" width="360" height="260" rx="8" fill="#16213e"/>
+  <rect x="40" y="60" width="320" height="180" rx="4" fill="#0f3460"/>
+  
+  <!-- Chart bars -->
+  <rect x="60" y="180" width="30" height="40" fill="#e94560"/>
+  <rect x="100" y="160" width="30" height="60" fill="#f47068"/>
+  <rect x="140" y="140" width="30" height="80" fill="#e94560"/>
+  <rect x="180" y="120" width="30" height="100" fill="#f47068"/>
+  <rect x="220" y="130" width="30" height="90" fill="#e94560"/>
+  <rect x="260" y="150" width="30" height="70" fill="#f47068"/>
+  <rect x="300" y="170" width="30" height="50" fill="#e94560"/>
+  
+  <!-- Grid lines -->
+  <line x1="40" y1="100" x2="360" y2="100" stroke="#2a2a4a" stroke-width="1"/>
+  <line x1="40" y1="140" x2="360" y2="140" stroke="#2a2a4a" stroke-width="1"/>
+  <line x1="40" y1="180" x2="360" y2="180" stroke="#2a2a4a" stroke-width="1"/>
+  
+  <!-- Header -->
+  <rect x="40" y="30" width="120" height="20" rx="4" fill="#2a2a4a"/>
+  <circle cx="340" cy="40" r="8" fill="#e94560"/>
+  
+  <!-- Side panel -->
+  <rect x="340" y="60" width="40" height="180" rx="4" fill="#1a1a2e"/>
+  <rect x="345" y="70" width="30" height="4" rx="2" fill="#2a2a4a"/>
+  <rect x="345" y="80" width="30" height="4" rx="2" fill="#2a2a4a"/>
+  <rect x="345" y="90" width="30" height="4" rx="2" fill="#2a2a4a"/>
+</svg>
