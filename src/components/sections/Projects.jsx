@@ -18,7 +18,7 @@ const Projects = () => {
       icon: BarChart3,
       color: 'from-orange-500 to-red-600',
       accent: 'orange',
-      image: '/placeholder-sales.svg',
+      image: '/sale-picture.png',
       liveDemo: 'https://sales-production.vercel.app/',
       githubUrl: 'https://github.com/marchugue/sales_dashboard-source_code',
     },
