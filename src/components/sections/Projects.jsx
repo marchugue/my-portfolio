@@ -10,42 +10,6 @@ const Projects = () => {
   const projects = [
     {
       id: 1,
-      title: 'VIOTrack',
-      subtitle: 'RFID-Based Vehicle Tracking System',
-      description:
-        'A comprehensive vehicle tracking system built with Layered (N-Tier) Architecture. Features JWT-based authentication middleware, secure PHP REST API for CRUD operations between backend and frontend, RFID scanning integration, and a responsive React dashboard.',
-      tech: ['React JS', 'PHP', 'MySQL', 'JWT', 'REST API', 'RFID'],
-      icon: Radio,
-      color: 'from-cyan-500 to-blue-600',
-      accent: 'cyan',
-      image: '/placeholder-viotrack.svg',
-    },
-    {
-      id: 2,
-      title: 'IoT Sensor Hub',
-      subtitle: 'Environmental Monitoring System',
-      description:
-        'A distributed sensor network for monitoring temperature, humidity, and air quality. Data is collected and visualized in real-time through a web interface.',
-      tech: ['Python', 'C++', 'MySQL', 'React JS'],
-      icon: Cpu,
-      color: 'from-purple-500 to-pink-600',
-      accent: 'purple',
-      image: '/placeholder-iot.svg',
-    },
-    {
-      id: 3,
-      title: 'SecureAuth',
-      subtitle: 'Multi-Factor Authentication System',
-      description:
-        'A secure authentication platform implementing various MFA methods including SMS, email, and hardware tokens for enterprise applications.',
-      tech: ['Java', 'PHP', 'MySQL', 'React JS'],
-      icon: Shield,
-      color: 'from-green-500 to-emerald-600',
-      accent: 'green',
-      image: '/placeholder-auth.svg',
-    },
-    {
-      id: 4,
       title: 'Sales Analytics Dashboard',
       subtitle: 'Data Analytics & Visualization Platform',
       description:
