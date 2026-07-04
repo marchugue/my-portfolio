@@ -1,6 +1,6 @@
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight, Github, Radio, Cpu, Shield, ExternalLink, BarChart3 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Github, Radio, Cpu, Shield, ExternalLink, BarChart3, Brain } from 'lucide-react';
 
 const Projects = () => {
   const ref = useRef(null);
@@ -21,6 +21,29 @@ const Projects = () => {
       image: '/sale-picture.png',
       liveDemo: 'https://sales-production.vercel.app/',
       githubUrl: 'https://github.com/marchugue/sales_dashboard-source_code',
+    },
+    {
+      id: 2,
+      title: 'System Analyzer',
+      subtitle: 'AI-powered business and systems analysis made simple.',
+      description:
+        'An AI-powered tool that transforms structured client questionnaires into professional business and systems analysis reports with actionable recommendations.',
+      tech: [
+        'React 18',
+        'TypeScript',
+        'Vite',
+        'Tailwind CSS',
+        'Supabase',
+        'Groq API',
+        'HTML2PDF.js',
+        'LocalStorage'
+      ],
+      icon: Brain,
+      color: 'from-violet-500 to-purple-600',
+      accent: 'violet',
+      image: '/System_analyzer.jpg',
+      liveDemo: 'https://ai-system-analyzer.vercel.app/',
+      githubUrl: 'https://github.com/marchugue/ai-system-analyzer',
     },
   ];
 
